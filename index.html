@@ -41,32 +41,45 @@
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
 
-    let database = firebase.database();
-    let meldinger = database.ref("meldinger");
+    var database = firebase.database();
+    var meldinger = database.ref("meldinger");
 
-    let meldingInput = document.getElementById("meldingInput");
-    let inpAvsender = document.getElementById("inpAvsender");
-    let inpTekst = document.getElementById("inpTekst");
-    let txtMeldinger = document.getElementById("txtMeldinger");
+    var meldingInput = document.getElementById("meldingInput");
+    var txtMeldinger = document.getElementById("txtMeldinger");
+    var inpAvsender = document.getElementById("inpAvsender");
+    var inpTekst = document.getElementById("inpTekst");
 
     function visMelding(snapshot){
         let melding = snapshot.val();
-        let meldingTekst = `<p> <b> ${melding.avsender} </b> ${melding.tekst} </p>`;
+        let meldingTekst = `<p> <b> ${melding.avsender} </b> ${melding.tekst} <br> <i> <small> ${melding.tidspunkt} </small> </i> </p>`;
         txtMeldinger.innerHTML = meldingTekst + txtMeldinger.innerHTML;
     }
-    
+
     function regNyMelding(evt){
         evt.preventDefault();
+
+        var time = Date.now();
+        var date = new Date(time);
+        var dato = "0" + date.getDate();
+        var month = "0" + (date.getMonth() + 1);
+        var year = date.getFullYear()
+        var hours = date.getHours();
+        var minutes = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds();
+        var formattedTime = dato.substr(-2) + "." + month.substr(-2) + "." + year + " - " + hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
+        
         var nyMelding = {
             "avsender":inpAvsender.value,
             "tekst":inpTekst.value,
-            //"tidspunkt":
+            "tidspunkt":formattedTime
         };
+
         meldinger.push(nyMelding);
         inpTekst.value = "";
     }
     meldinger.on("child_added", visMelding);
     meldingInput.onsubmit = regNyMelding;
+
     </script>
 </body>
 </html>
