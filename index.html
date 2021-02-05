@@ -52,7 +52,7 @@
     function visMelding(snapshot){
         let melding = snapshot.val();
         let meldingTekst = `<p> <b> ${melding.avsender} </b> ${melding.tekst} </p>`;
-        txtMeldinger.innerHTML = txtMeldinger.innerHTML + meldingTekst;
+        txtMeldinger.innerHTML = meldingTekst + txtMeldinger.innerHTML;
     }
     
     function regNyMelding(evt){
